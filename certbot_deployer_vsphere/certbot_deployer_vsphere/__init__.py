@@ -5,6 +5,7 @@ VSphere Deployer
 import argparse
 import logging
 import os
+import textwrap
 
 from typing import ClassVar, Dict
 
@@ -67,6 +68,17 @@ class VsphereDeployer(Deployer):
         Register command-line arguments for the ExampleDeployer.
         """
         parser.description = __description__
+        parser.formatter_class = argparse.RawDescriptionHelpFormatter
+        parser.description = f"""BIG-IP subcommand
+        {__description__}
+        """
+        parser.epilog = textwrap.dedent(
+            """
+            This tool expects to run as a Certbot deploy hook, and for the
+            environment variable `RENEWED_LINEAGE` to point to the live
+            certificate directory just updated/reated by Certbot.
+            """
+        )
 
         parser.add_argument(
             "--user",
