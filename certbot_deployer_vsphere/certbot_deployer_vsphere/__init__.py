@@ -7,7 +7,7 @@ import logging
 import os
 import textwrap
 
-from typing import ClassVar, Dict
+from typing import ClassVar, Dict, List
 
 import requests
 
@@ -61,6 +61,7 @@ class VsphereDeployer(Deployer):
 
     subcommand: ClassVar[str] = "vsphere"
     version: ClassVar[str] = __version__
+    required_args: List[str] = ["user", "host", "password"]
 
     @staticmethod
     def register_args(*, parser: argparse.ArgumentParser) -> None:
@@ -84,7 +85,6 @@ class VsphereDeployer(Deployer):
             "--user",
             "-u",
             help=("vSphere API user"),
-            required=True,
             type=str,
         )
 
@@ -92,7 +92,6 @@ class VsphereDeployer(Deployer):
             "--password",
             "-p",
             help=("vSphere API password"),
-            required=True,
             type=str,
         )
 
@@ -100,7 +99,6 @@ class VsphereDeployer(Deployer):
             "--host",
             "-H",
             help=("vsphere host to target"),
-            required=True,
             type=str,
         )
 
@@ -113,6 +111,18 @@ class VsphereDeployer(Deployer):
                 "certificates over self-signed certificates currently in-place"
             ),
         )
+
+    @staticmethod
+    def argparse_post(*, args: argparse.Namespace) -> None:
+        """
+        Verify required args present
+        """
+        for arg in VsphereDeployer.required_args:
+            if arg not in args:
+                raise argparse.ArgumentTypeError(
+                    f"Argument `{arg}` is required either in the configuration file "
+                    "or on the command-line"
+                )
 
     @staticmethod
     def entrypoint(

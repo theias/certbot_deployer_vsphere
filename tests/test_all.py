@@ -129,3 +129,23 @@ def test_main_delegation(monkeypatch: pytest.MonkeyPatch) -> None:
     plugin_main.main(argv=argv)
     assert called_argv == expected_argv
     assert called_deployers == expected_deployers
+
+
+def test_argparse_post() -> None:
+    """
+    Verify that the deployer subclass effectively requires all of its required
+    args, both individually and collectively
+    """
+    required_args: Dict[str, str] = {
+        k: "somevalue" for k in VsphereDeployer.required_args
+    }
+    # If this runs with no exception, we're happy
+    VsphereDeployer.argparse_post(args=argparse.Namespace(**required_args))
+
+    args: Dict[str, str]
+    for arg in VsphereDeployer.required_args:
+        args = dict(required_args)
+        del args[arg]
+        # Every call missing an arg should raise
+        with pytest.raises(argparse.ArgumentTypeError):
+            VsphereDeployer.argparse_post(args=argparse.Namespace(**args))
