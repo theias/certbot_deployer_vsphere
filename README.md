@@ -1,7 +1,7 @@
 certbot_deployer_vsphere
 ===========
 
-[Certbot Deployer] plugin for deploying web certificates for the vSphere web UI via [Certbot] "deploy hook".
+[Certbot Deployer] plugin for deploying "Machine SSL" web certificates via [Certbot] "deploy hook".
 
 # Requires
 

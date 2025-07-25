@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Handle __future__ import to allow pipe-union syntax on 3.9
 
+### Changed
+- Update description
+
 ## 0.1.2 - 2025-07-11
 ### Fixed
 - Specify versions of pyOpenSSL and vmware to play happily together
